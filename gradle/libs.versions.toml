@@ -4,7 +4,15 @@
 kotlin = "2.0.0"
 ktlint-gradle = "12.1.1"
 ktlint = "1.3.1"
+serialization = "1.7.1"
 
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradle" }
+serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+[libraries]
+serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization" }
+
+[bundles]
+kotlin = ["serialization"]

@@ -22,6 +22,7 @@ class ShuttlePluginFunctionalTest {
 
     @Test fun `can run task`() {
         // Set up the test build
+        // Original: https://github.com/FabricMC/fabric-example-mod
         settingsFile.writeText(
             // language=groovy
             """
@@ -42,7 +43,7 @@ class ShuttlePluginFunctionalTest {
             """
             plugins {
             	id 'fabric-loom' version '1.7-SNAPSHOT'
-            	id 'maven-publish'
+                id 'net.turtton.shuttle'
             }
             
             version = project.mod_version

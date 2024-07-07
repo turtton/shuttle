@@ -11,9 +11,10 @@ class ShuttlePluginTest {
     @Test fun `plugin registers task`() {
         // Create a test project and apply the plugin
         val project = ProjectBuilder.builder().build()
+        project.plugins.apply("java")
         project.plugins.apply("net.turtton.shuttle")
 
         // Verify the result
-        assertNotNull(project.tasks.findByName("greeting"))
+        assertNotNull(project.tasks.findByName("processResources"))
     }
 }

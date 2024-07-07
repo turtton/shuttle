@@ -12,6 +12,7 @@ plugins {
     // Apply the Kotlin JVM plugin to add support for Kotlin.
     alias(libs.plugins.jvm)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.serialization)
 }
 
 repositories {
@@ -22,6 +23,7 @@ repositories {
 dependencies {
     // Use the Kotlin JUnit 5 integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+    implementation(libs.bundles.kotlin)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
