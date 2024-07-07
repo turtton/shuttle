@@ -2,7 +2,11 @@ package net.turtton.shuttle
 
 import java.io.File
 import kotlin.test.Test
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.jupiter.api.io.TempDir
 
@@ -54,6 +58,12 @@ class ShuttlePluginFunctionalTest {
             }
             
             repositories {
+                maven { url "https://maven.shedaniel.me/" }
+                maven { url "https://maven.terraformersmc.com/releases/" }
+                maven {
+                    name 'Xander Maven'
+                    url 'https://maven.isxander.dev/releases'
+                } 
                 maven {
                     name = "Terraformers"
                     url = "https://maven.terraformersmc.com/"
@@ -81,10 +91,24 @@ class ShuttlePluginFunctionalTest {
             	// Fabric API. This is technically optional, but you probably want it anyway.
             	modImplementation "net.fabricmc.fabric-api:fabric-api:$\\{project.fabric_version}"
             
-                // include dependency
+                // ==== Testing dependencies ====
+                // General dependencies
+                // https://github.com/FabricMC/fabric-language-kotlin#usage
+                modImplementation("net.fabricmc:fabric-language-kotlin:1.11.0+kotlin.2.0.0")
+            
+                // Api dependencies
+                // https://github.com/shedaniel/cloth-config
+                modApi("me.shedaniel.cloth:cloth-config-fabric:15.0.127") {
+                    exclude(group: "net.fabricmc.fabric-api")
+                }
+                
+                // inlude dependencies
+                // https://github.com/isXander/YetAnotherConfigLib
+                modImplementation(include "dev.isxander:yet-another-config-lib:3.5.0+1.21-fabric")
+            
+                // compileOnly dependencies
                 // https://github.com/TerraformersMC/ModMenu
-                modImplementation(include "com.terraformersmc:modmenu:11.0.1")
-            	
+                modCompileOnly "com.terraformersmc:modmenu:11.0.1"
             }
             
             processResources {
@@ -93,6 +117,10 @@ class ShuttlePluginFunctionalTest {
             	filesMatching("fabric.mod.json") {
             		expand "version": project.version
             	}
+            
+                doLast {
+                    file(destinationDir.getAbsolutePath() + "/fabric.mod.json").eachLine { println it }
+                }
             }
             
             tasks.withType(JavaCompile).configureEach {
@@ -191,12 +219,24 @@ class ShuttlePluginFunctionalTest {
         val runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("processResources")
+        runner.withArguments("processResources", "--stacktrace", "--info")
         runner.withProjectDir(projectDir)
         val result = runner.build()
 
         assertTrue(result.output.contains("BUILD SUCCESSFUL"))
         // Verify the result
-        assertTrue(projectDir.resolve("build/resources/main/fabric.mod.json").exists())
+        val fabricModJson = projectDir.resolve("build/resources/main/fabric.mod.json")
+        assertTrue(fabricModJson.exists())
+        val json = Json.decodeFromString<JsonObject>(fabricModJson.readText())
+        val depends = json["depends"]?.jsonObject
+        assertNotNull(depends)
+        assertTrue(depends.containsKey("fabric-language-kotlin"))
+        assertTrue(depends.containsKey("cloth-config"))
+        assertTrue(!depends.containsKey("modmenu"))
+
+        val recommends = json["recommends"]?.jsonObject
+        assertNotNull(recommends)
+        assertTrue(!recommends.containsKey("yet-another-config-lib"))
+        assertTrue(recommends.containsKey("modmenu"))
     }
 }
