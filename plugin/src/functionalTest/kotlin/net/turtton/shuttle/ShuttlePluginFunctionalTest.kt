@@ -54,11 +54,10 @@ class ShuttlePluginFunctionalTest {
             }
             
             repositories {
-            	// Add repositories to retrieve artifacts from in here.
-            	// You should only use this when depending on other mods because
-            	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-            	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-            	// for more information about repositories.
+                maven {
+                    name = "Terraformers"
+                    url = "https://maven.terraformersmc.com/"
+                }
             }
             
             loom {
@@ -81,6 +80,10 @@ class ShuttlePluginFunctionalTest {
             
             	// Fabric API. This is technically optional, but you probably want it anyway.
             	modImplementation "net.fabricmc.fabric-api:fabric-api:$\\{project.fabric_version}"
+            
+                // include dependency
+                // https://github.com/TerraformersMC/ModMenu
+                modImplementation(include "com.terraformersmc:modmenu:11.0.1")
             	
             }
             
