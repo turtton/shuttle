@@ -1,4 +1,4 @@
-package net.turtton.shuttle
+package net.turtton.shuttle.dependency
 
 import java.io.File
 import java.util.jar.JarFile
@@ -13,7 +13,7 @@ private val json = Json {
 @Serializable
 private data class MiniFabricModJson(val id: String, val version: String)
 
-fun Set<File>.collectDependencies(): List<ModDependencyInfo> {
+internal fun Set<File>.collectDependencies(): List<ModDependencyInfo> {
     return mapNotNull {
         val jar = JarFile(it)
         val modJsonEntry = jar.getJarEntry("fabric.mod.json")
