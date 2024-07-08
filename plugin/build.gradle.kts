@@ -16,7 +16,11 @@ plugins {
     alias(libs.plugins.publish)
 }
 
-version = System.getenv("PLUGIN_VERSION") ?: "DEV"
+base {
+    archivesName = "shuttle"
+    version = System.getenv("PLUGIN_VERSION") ?: "DEV"
+    group = "net.turtton"
+}
 
 repositories {
     // Use Maven Central for resolving dependencies.
