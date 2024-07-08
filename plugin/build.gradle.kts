@@ -16,7 +16,7 @@ plugins {
     alias(libs.plugins.publish)
 }
 
-version = "0.1.0"
+version = System.getenv("PLUGIN_VERSION") ?: "DEV"
 
 repositories {
     // Use Maven Central for resolving dependencies.
