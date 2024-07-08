@@ -13,7 +13,10 @@ plugins {
     alias(libs.plugins.jvm)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.publish)
 }
+
+version = "0.1.0"
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -29,9 +32,14 @@ dependencies {
 }
 
 gradlePlugin {
+    website = "https://github.com/turtton/shuttle"
+    vcsUrl = "https://github.com/turtton/shuttle.git"
     // Define the plugin
-    val greeting by plugins.creating {
+    val shuttle by plugins.creating {
         id = "net.turtton.shuttle"
+        displayName = "shuttle"
+        description = "A gradle plugin managing dependencies syncing to fabric.mod.json"
+        tags = listOf("fabric", "generator", "fabric-loom")
         implementationClass = "net.turtton.shuttle.ShuttlePlugin"
     }
 }
