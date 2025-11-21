@@ -12,7 +12,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: get release tag
         id: rawtag
         uses: olegtarasov/get-tag@2.1.3
